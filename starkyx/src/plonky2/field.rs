@@ -5,27 +5,34 @@ use plonky2::field::types::{
 
 use crate::math::prelude::*;
 
+/// Implementation of `Ring` for fields that implement `Plonky2Field`.
 impl<F: Plonky2Field> Ring for F {
     const ONE: Self = F::ONE;
     const ZERO: Self = F::ZERO;
 }
 
+/// Implementation of `Field` for fields that implement `Plonky2Field`.
 impl<F: Plonky2Field> Field for F {
     fn try_inverse(&self) -> Option<Self> {
         Some(self.inverse())
     }
+
     fn from_canonical_u8(n: u8) -> Self {
         F::from_canonical_u8(n)
     }
+
     fn from_canonical_u16(n: u16) -> Self {
         F::from_canonical_u16(n)
     }
+
     fn from_canonical_u32(n: u32) -> Self {
         F::from_canonical_u32(n)
     }
+
     fn from_canonical_u64(n: u64) -> Self {
         F::from_canonical_u64(n)
     }
+
     fn from_canonical_usize(n: usize) -> Self {
         F::from_canonical_usize(n)
     }
@@ -43,6 +50,7 @@ impl<F: Plonky2Field> Field for F {
     }
 }
 
+/// Implementation of `Sample` for fields that implement `Plonky2Sample`.
 impl<F: Plonky2Sample> Sample for F {
     fn sample<R>(rng: &mut R) -> Self
     where
@@ -52,8 +60,10 @@ impl<F: Plonky2Sample> Sample for F {
     }
 }
 
+/// Implementation of `PrimeField` for fields that implement `Plonky2PrimeField`.
 impl<F: Plonky2PrimeField> PrimeField for F {}
 
+/// Implementation of `PrimeField64` for fields that implement `Plonky2PrimeField64`.
 impl<F: Plonky2PrimeField64> PrimeField64 for F {
     fn as_canonical_u64(&self) -> u64 {
         self.to_canonical_u64()
