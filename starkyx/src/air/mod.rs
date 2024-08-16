@@ -24,6 +24,7 @@ pub trait AirConstraint<AP: AirParser> {
 }
 
 pub trait RAirData {
+    /// The width of the AIR data
     fn width(&self) -> usize;
 
     /// The maximal constraint degree
@@ -32,16 +33,20 @@ pub trait RAirData {
     /// The data needed for each round
     fn round_data(&self) -> Vec<RoundDatum>;
 
+    /// Total number of columns across all rounds
     fn num_columns(&self) -> usize {
         self.round_data().iter().map(|d| d.num_columns).sum()
     }
 
+    /// Number of public inputs
     fn num_public_inputs(&self) -> usize;
 
+    /// Total number of rounds
     fn num_rounds(&self) -> usize {
         self.round_data().len()
     }
 
+    /// Total number of global values across all rounds
     fn num_global_values(&self) -> usize {
         self.round_data()
             .iter()
@@ -49,8 +54,9 @@ pub trait RAirData {
             .sum()
     }
 
+    /// Quotient degree factor
     fn quotient_degree_factor(&self) -> usize {
-        1.max(self.constraint_degree() - 1)
+        1.max(self.constraint_degree().saturating_sub(1))
     }
 }
 
@@ -58,7 +64,7 @@ pub trait RAir<AP: AirParser>: RAirData {
     /// Evaluation of the vanishing polynomials.
     fn eval(&self, parser: &mut AP);
 
-    // Evaluation of global vanishing constraints
+    /// Evaluation of global vanishing constraints
     fn eval_global(&self, parser: &mut AP);
 }
 
